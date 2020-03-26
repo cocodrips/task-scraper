@@ -8,11 +8,12 @@ import (
 	"net/url"
 	"os"
 	"path"
+	"regexp"
 	"strings"
 )
 
 var (
-	max_depth int = 1000
+	max_depth int = 20
 )
 
 type Message struct {
@@ -61,6 +62,20 @@ func EnglishOutput(message string) {
 	}
 }
 
+func TaskCondition(message string) bool {
+	re := regexp.MustCompile(`(\d{4}/\d{2}/\d{2}).?tasks.+`)
+	return re.MatchString(message)
+}
+
+func TaskOutput(message string) {
+	for _, line := range strings.Split(message, "\n") {
+		fmt.Println(line)
+	}
+	fmt.Println("-----------")
+}
+
+
+
 func GetMessage(condition func(string) bool, output func(string)) {
 
 	var responseJson Message
@@ -78,8 +93,9 @@ func GetMessage(condition func(string) bool, output func(string)) {
 		// Parse texta
 		err := json.Unmarshal(body, &responseJson)
 		if err != nil {
-			fmt.Printf("Failed to parse")
+			fmt.Printf("Failed to parse\n")
 		}
+
 		for _, message := range responseJson.Messages {
 			if message.User != os.Getenv("USER_ID") {
 				continue

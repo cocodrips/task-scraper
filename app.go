@@ -1,9 +1,11 @@
 package main
 
 import (
-	"github.com/cocodrips/task-scraper/scraper"
+	"./scraper"
 )
 
 func main() {
-	scraper.GetMessage(scraper.EnglishCondition, scraper.EnglishOutput)
+	//scraper.GetMessage(scraper.EnglishCondition, scraper.EnglishOutput)
+	scraper.GetMessage(scraper.TaskCondition, scraper.TaskOutput)
+
 }
